@@ -2,23 +2,23 @@
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="SlidingWindow.UserInterface">
   <grid id="27dc6" binding="panel1" default-binding="true" layout-manager="GridBagLayout">
     <constraints>
-      <xy x="20" y="20" width="500" height="400"/>
+      <xy x="20" y="20" width="637" height="1192"/>
     </constraints>
     <properties>
-      <preferredSize width="500" height="500"/>
+      <preferredSize width="400" height="400"/>
       <requestFocusEnabled value="true"/>
     </properties>
     <border type="none"/>
     <children>
       <hspacer id="3a2c8">
         <constraints>
-          <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="1" column="9" row-span="5" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
           <gridbag weightx="0.0" weighty="0.0"/>
         </constraints>
       </hspacer>
       <component id="df9f2" class="javax.swing.JButton" binding="btnDecode">
         <constraints>
-          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="2" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="1" column="4" row-span="5" col-span="5" vsize-policy="0" hsize-policy="3" anchor="10" fill="0" indent="0" use-parent-layout="false"/>
           <gridbag top="0" left="30" bottom="30" right="0" weightx="1.0" weighty="1.0"/>
         </constraints>
         <properties>
@@ -32,7 +32,7 @@
       </component>
       <component id="1be5" class="javax.swing.JButton" binding="btnCode">
         <constraints>
-          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="2" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="5" column="0" row-span="1" col-span="4" vsize-policy="0" hsize-policy="3" anchor="2" fill="0" indent="0" use-parent-layout="false"/>
           <gridbag top="0" left="30" bottom="30" right="0" weightx="1.0" weighty="1.0"/>
         </constraints>
         <properties>
@@ -41,6 +41,79 @@
           <preferredSize width="100" height="40"/>
           <text value="Code"/>
           <verifyInputWhenFocusTarget value="true"/>
+        </properties>
+      </component>
+      <component id="baa83" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="1" column="0" row-span="2" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <gridbag top="50" left="10" bottom="0" right="0" weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <font size="14" style="0"/>
+          <text value="Offset [3 - 15]"/>
+          <verticalAlignment value="1"/>
+        </properties>
+      </component>
+      <component id="f4e95" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="4" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <gridbag top="50" left="10" bottom="0" right="0" weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <font size="14" style="0"/>
+          <text value="Show tokens"/>
+        </properties>
+      </component>
+      <component id="8a461" class="javax.swing.JTextField" binding="textOffset">
+        <constraints>
+          <grid row="1" column="2" row-span="2" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="0" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="-1"/>
+          </grid>
+          <gridbag top="50" left="10" bottom="0" right="0" weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <inheritsPopupMenu value="false"/>
+          <margin top="2" left="5" bottom="2" right="5"/>
+          <minimumSize width="100" height="30"/>
+          <preferredSize width="100" height="30"/>
+          <text value="5"/>
+        </properties>
+      </component>
+      <component id="4fdce" class="javax.swing.JTextField" binding="textLength">
+        <constraints>
+          <grid row="3" column="2" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="0" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="-1"/>
+          </grid>
+          <gridbag top="50" left="10" bottom="0" right="0" weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <inheritsPopupMenu value="false"/>
+          <margin top="2" left="5" bottom="2" right="5"/>
+          <minimumSize width="100" height="30"/>
+          <preferredSize width="100" height="30"/>
+          <text value="5"/>
+        </properties>
+      </component>
+      <component id="90de4" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="3" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <gridbag top="50" left="10" bottom="0" right="0" weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <font size="14" style="0"/>
+          <text value="Length [2 - 7]"/>
+          <verticalAlignment value="1"/>
+        </properties>
+      </component>
+      <component id="2e2c2" class="javax.swing.JCheckBox" binding="checkBox1" default-binding="true">
+        <constraints>
+          <grid row="4" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <gridbag top="50" left="10" bottom="0" right="0" weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <preferredSize width="30" height="30"/>
+          <rolloverEnabled value="true"/>
+          <text value=""/>
         </properties>
       </component>
     </children>
