@@ -1,22 +1,32 @@
 package SlidingWindow;
 
 import bitreaderwriter.BitReader;
+import bitreaderwriter.BitWriter;
 import bitreaderwriter.Constants;
 
 public class Commons {
 
+    private short offsetBitsNumber;
+    private short lengthBitsNumber;
     private int windowLength;
     private int borderIndex;
     private int[] window;
     BitReader bitReaderInstance;
+    BitWriter bitWriterInstance;
     int bytesLeftToRead;
 
-    public Commons(int offset, int length, String inputFile) {
+    public Commons(short offset, short length, String inputFile, String outputfile) {
+
+        offsetBitsNumber = offset;
+        lengthBitsNumber = length;
 
         windowLength = Constants.POWER_OF_2[offset] + Constants.POWER_OF_2[length];
         borderIndex = Constants.POWER_OF_2[offset];
         window = new int[windowLength];
+
         bitReaderInstance = new BitReader(inputFile);
+        bitWriterInstance = new BitWriter(outputfile);
+
         bytesLeftToRead = bitReaderInstance.fileLength;
     }
 
@@ -26,28 +36,43 @@ public class Commons {
 
         boolean fileFinished = false;
 
-        while (!fileFinished) {
+        while (lastIndexLookAhead != borderIndex) {
 
-            boolean tookenFinded = false;
+            boolean tokenFound = false;
             int length = 0;
-            int offset = 0;
+            int offset = borderIndex - 1;
 
-            while (!tookenFinded) {
+            while (!tokenFound) {
 
                 int tempIndexSB = searchCharacters(offset, length + 1);
                 if (tempIndexSB == -1) {
-                    tookenFinded = true;
+                    tokenFound = true;
                 } else {
                     length++;
                     offset = tempIndexSB;
                 }
 
             }
+            if (borderIndex + length == lastIndexLookAhead) {
+                length--;
+            }
 
-            //write length,offset,window[board-length]
-            //window<<length
+            int numberOfCharactersToShift = length + 1;
+            System.out.println(length + " " + (borderIndex - 1 - offset) + " " + window[borderIndex + length]);
+            writeToken(length, borderIndex - 1 - offset, window[borderIndex + length]);
+
+            shiftBuffer(numberOfCharactersToShift);
+
+            if (lastIndexLookAhead == windowLength) {
+                lastIndexLookAhead = fillLookAheadBuffer(windowLength - numberOfCharactersToShift);
+            } else {
+                lastIndexLookAhead -= numberOfCharactersToShift;
+
+            }
+
+            //window<<length // length+1??
             //fillLookAheadBuffer(windowLength - length)?
-
+            // offsetFinal = borderIndex - 1 - offset !!!!!!!!!!!!!!!!!1
             if (bytesLeftToRead == 0) {
                 fileFinished = true;
             }
@@ -55,13 +80,29 @@ public class Commons {
 
     }
 
-    /* index from search-buffer OR -1 */
+    private void writeToken(int length, int offset, int newCharacter) {
+
+        bitWriterInstance.WriteNBits(length, lengthBitsNumber);
+        bitWriterInstance.WriteNBits(offset, offsetBitsNumber);
+        bitWriterInstance.WriteNBits(newCharacter, 8);
+
+    }
+
+    private void shiftBuffer(int difference) {
+        for (int i = 0; i < windowLength - difference; i++) {
+            window[i] = window[i + difference];
+        }
+    }
+
+    /* index from SB or -1
+     * offsetFinal = borderIndex - 1 - offset */
     private int searchCharacters(int oldOffset, int sizeBufferToSearch) {
 
+        // to check sizeBufferToSearch > LAB.length & oldOffset > SB.length
         for (int i = oldOffset; i >= 0; i--) {
 
             boolean sequenceFound = true;
-            for (int j = i; j < i + sizeBufferToSearch; j++) {
+            for (int j = 0; j < sizeBufferToSearch; j++) {
                 if (window[i + j] != window[borderIndex + j]) {
                     sequenceFound = false;
                 }
@@ -94,7 +135,7 @@ public class Commons {
         } else {
 
             int lastIndex = startIndex + bytesLeftToRead;
-            for (int i = 0; i < lastIndex; i++) {
+            for (int i = startIndex; i < lastIndex; i++) {
                 window[i] = bitReaderInstance.ReadNBits(Constants.WORD_BITS_NUMBER);
                 bytesLeftToRead--;
             }

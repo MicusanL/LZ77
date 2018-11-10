@@ -35,8 +35,8 @@ public class UserInterface {
             public void actionPerformed(ActionEvent e) {
 
                 Code lz77Code = new Code();
-                int offset = Integer.parseInt(textOffset.getText());
-                int length = Integer.parseInt(textLength.getText());
+                short offset = Short.parseShort(textOffset.getText());
+                short length = Short.parseShort(textLength.getText());
                 lz77Code.CodeFileUsingLz77(offset, length);
 
 
