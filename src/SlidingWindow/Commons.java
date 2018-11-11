@@ -14,6 +14,7 @@ public class Commons {
     BitReader bitReaderInstance;
     BitWriter bitWriterInstance;
     int bytesLeftToRead;
+    int lastIndexLookAhead;
 
     public Commons(short offset, short length, String inputFile, String outputfile) {
 
@@ -32,7 +33,7 @@ public class Commons {
 
     public void codeFile() {
 
-        int lastIndexLookAhead = fillLookAheadBuffer(borderIndex);
+        lastIndexLookAhead = fillLookAheadBuffer(borderIndex);
 
         boolean fileFinished = false;
 
@@ -53,12 +54,10 @@ public class Commons {
                 }
 
             }
-            if (borderIndex + length == lastIndexLookAhead) {
-                length--;
-            }
 
             int numberOfCharactersToShift = length + 1;
-            System.out.println(length + " " + (borderIndex - 1 - offset) + " " + window[borderIndex + length]);
+
+            /* if length == 0 */
             writeToken(length, borderIndex - 1 - offset, window[borderIndex + length]);
 
             shiftBuffer(numberOfCharactersToShift);
@@ -99,6 +98,10 @@ public class Commons {
     private int searchCharacters(int oldOffset, int sizeBufferToSearch) {
 
         // to check sizeBufferToSearch > LAB.length & oldOffset > SB.length
+        if (borderIndex + sizeBufferToSearch == lastIndexLookAhead) {
+            return -1;
+        }
+
         for (int i = oldOffset; i >= 0; i--) {
 
             boolean sequenceFound = true;
