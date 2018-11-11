@@ -2,20 +2,20 @@ package SlidingWindow;
 
 import javax.swing.*;
 
-public class Code {
+public class Decode {
     JFileChooser fileChooser = new JFileChooser();
 
-    public void CodeFileUsingLz77(final short offset, final short length) {
+    public void DecodeFileUsingLz77() {
 
         if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
             String inputFile = fileChooser.getSelectedFile().toString();
             String outputFile = getOutputFileName(inputFile);
 
-            Commons codeLZ77 = new Commons(offset, length, inputFile, outputFile);
-            codeLZ77.writeHeader(offset,length);
-            codeLZ77.codeFile();
+            Commons codeLZ77 = new Commons(inputFile, outputFile);
+            codeLZ77.readHeader();
+            codeLZ77.decodeFile();
 
-            System.out.println("Code finished");
+            System.out.println("DeCode finished");
             System.exit(0);
         }
     }
@@ -24,8 +24,10 @@ public class Code {
         String[] parts = inputFile.split("\\\\"); // regex: need to escape dot
         String outputFile = parts[parts.length - 1]; // outputs "en"
         parts = outputFile.split("\\.");
-        outputFile = "C://Users//lidia//Desktop//Shannon//" + parts[0] + "-Lz77-encrypted." + parts[1];
+        outputFile = "C://Users//lidia//Desktop//Shannon//" + parts[0] + "-Lz77-Decrypted." + parts[1];
 
         return outputFile;
     }
+
 }
+

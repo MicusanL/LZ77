@@ -43,18 +43,18 @@ public class UserInterface {
             }
         });
 
-       /* btnDecode.addActionListener(new ActionListener() {
+        btnDecode.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
 
                 Decode lz77Decode = new Decode();
                 try {
-                    lz77Decode.CodeFileUsingLz77();
+                    lz77Decode.DecodeFileUsingLz77();
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
             }
-        });*/
+        });
     }
 }

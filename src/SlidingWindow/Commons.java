@@ -31,6 +31,76 @@ public class Commons {
         bytesLeftToRead = bitReaderInstance.fileLength;
     }
 
+    public Commons(String inputFile, String outputfile) {
+
+        bitReaderInstance = new BitReader(inputFile);
+        bitWriterInstance = new BitWriter(outputfile);
+
+        bytesLeftToRead = bitReaderInstance.fileLength;
+    }
+
+    public void writeHeader(short offset, short length) {
+        bitWriterInstance.WriteNBits(offset, 4);
+        bitWriterInstance.WriteNBits(length, 3);
+    }
+
+    public void readHeader() {
+
+        offsetBitsNumber = (short) bitReaderInstance.ReadNBits(4);
+        lengthBitsNumber = (short) bitReaderInstance.ReadNBits(3);
+       // System.out.println(offsetBitsNumber + " " + lengthBitsNumber);
+        windowLength = Constants.POWER_OF_2[offsetBitsNumber] + Constants.POWER_OF_2[lengthBitsNumber];
+        borderIndex = Constants.POWER_OF_2[offsetBitsNumber];
+        window = new int[windowLength];
+    }
+
+    private void interpretToken() {
+
+        int length = bitReaderInstance.ReadNBits(lengthBitsNumber);
+        int offset = bitReaderInstance.ReadNBits(offsetBitsNumber);
+        int newChar = bitReaderInstance.ReadNBits(Constants.WORD_BITS_NUMBER);
+
+        if (length != 0) {
+            int lastCharacterLAB = borderIndex + length;
+            for (int i = borderIndex; i < lastCharacterLAB; i++) {
+                window[i] = window[i - offset - 1];
+
+               //System.out.println(window[i]);
+            }
+        }
+        window[borderIndex + length] = newChar;
+        int numberOfCharactersToWrite = length + 1;
+        writeNewCharSequence(numberOfCharactersToWrite);
+        shiftBuffer(numberOfCharactersToWrite);
+
+
+    }
+
+    private void writeNewCharSequence(int length) {
+
+        for (int i = borderIndex; i < borderIndex + length; i++) {
+            bitWriterInstance.WriteNBits(window[i], Constants.WORD_BITS_NUMBER);
+            //System.out.println(window[i]);
+        }
+    }
+
+    public void decodeFile() {
+
+        int tokensNumber = getTokensNumber();
+
+        while (tokensNumber != 0) {
+
+            interpretToken();
+            tokensNumber--;
+
+        }
+
+    }
+
+    private int getTokensNumber() {
+        return (bitReaderInstance.fileLength * 8 - 7) / (lengthBitsNumber + offsetBitsNumber + 8);
+    }
+
     public void codeFile() {
 
         lastIndexLookAhead = fillLookAheadBuffer(borderIndex);
@@ -77,10 +147,12 @@ public class Commons {
             }
         }
 
+        bitWriterInstance.WriteNBits(0, 7);
+
     }
 
     private void writeToken(int length, int offset, int newCharacter) {
-
+        //System.out.println(length + " " + offset + " " + newCharacter);
         bitWriterInstance.WriteNBits(length, lengthBitsNumber);
         bitWriterInstance.WriteNBits(offset, offsetBitsNumber);
         bitWriterInstance.WriteNBits(newCharacter, 8);
@@ -121,7 +193,7 @@ public class Commons {
 
     private void printLookAheanBuffer(int lastindex) {
         for (int i = borderIndex; i < lastindex; i++) {
-            System.out.println(i + " " + window[i]);
+            //System.out.println(i + " " + window[i]);
         }
     }
 
